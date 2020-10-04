@@ -3,6 +3,9 @@ import { withNavigation } from 'react-navigation'
 import {View, StyleSheet, Text, FlatList, Image, TouchableOpacity} from 'react-native';
 import api from '../services/api';
 
+
+
+
 function SpotList({ sangue, navigation }) {
     const [spots, setSpots] = useState([])
     useEffect(() => {
@@ -30,14 +33,14 @@ function SpotList({ sangue, navigation }) {
         <FlatList
         style={styles.list}
         data={spots}
-        keyExtractor={item => spot._id} 
+        keyExtractor={spot => spot._id} 
         horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
             <View style={styles.listItem}>
                 <Image style={styles.thumbnail} source={{uri: item.thumbnail_url}} />
                 <Text style={styles.hospital}> {item.hospital}</Text>
-                <Text style={styles.endereco}>{endereco.hospital}</Text>
+                <Text style={styles.endereco}>{item.endereco}</Text>
                 <TouchableOpacity onPress={() => handleNavigate(item._id)} style={styles.button}>
                     <Text style={styles.buttonText}>Solicitar reserva</Text>
                  </TouchableOpacity>
@@ -99,6 +102,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
 
+
 });
 
 export default withNavigation(SpotList);
+

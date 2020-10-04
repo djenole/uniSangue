@@ -16,6 +16,11 @@ mongoose.connect('mongodb+srv://djenoleReis:djenole123456@cluster0.m4p4y.mongodb
     useUnifiedTopology: true,
 })
 
+
+
+//variável criada temporariamente para armazenar 
+//os usuários conectados
+
 const connectedUsers = {};
 
 io.on('connection', socket => {
@@ -27,11 +32,22 @@ io.on('connection', socket => {
 
 });
 
+
+// O io é a parte que recebe ou envia mensagens para dentro do frontend ou mobile
+//como o io está sendo adicionado dentro do req e as rotas do bookingController também tem acesso ao req,
+// é possível buscar o req.io dentro do bookingController
+//permitindo ter acesso ao protocolo de comunicação do frontend
+
 app.use((req, res, next) => {
     req.io = io;
     req.connectedUsers = connectedUsers;
 
     return next();
+    // dessa forma todas as rotas da aplicação já tem acesso
+    // ao io e aos usuarios conectados na aplicação
+    // e o next é para continuar a aplicação
+    
+
 
 })
 

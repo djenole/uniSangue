@@ -4,7 +4,7 @@ const SpotSchema = new mongoose.Schema({
     thumbnail: String,
     hospital: String,
     endereco: String,
-    sangue:[String],
+    sangues:[String],
 
     //salvando o usuario criador do spot
     user: {

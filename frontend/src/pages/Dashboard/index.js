@@ -10,6 +10,10 @@ const [spots, setSpots] = useState([]);
 const [requests, setRequests] = useState([])
 
 
+//a utilização do useMemo faz a memorização de uma variável até que algo mude
+//nesse caso a variável que eu estou memorizando é o socket
+//o array de dependência cria a regra para ser necessario refazer a conexão do usuário caso o 
+// user_id for mudado
 const user_id = localStorage.getItem('user');
 const socket = useMemo(() => socketio('http://localhost:3333', {
     query: { user_id },
@@ -33,8 +37,19 @@ const socket = useMemo(() => socketio('http://localhost:3333', {
         }
 
         loadSpots();
-
     }, []);
+
+    async function handleAccept(id) {
+        await api.post(`/bookings/${id}/approvals`);
+
+        setRequests(requests.filter(request => request._id !== id));
+    }
+
+    async function handleReject(id) {
+        await api.post(`/bookings/${id}/approvals`);
+
+        setRequests(requests.filter(request => request._id !== id));
+    }
 
     return (
         <>
@@ -42,10 +57,10 @@ const socket = useMemo(() => socketio('http://localhost:3333', {
             {requests.map(request => (
                 <li key={request.id}>
                     <p>
-                        <strong> {request.user.email} </strong> está solicitando um agendamento em <strong>{request.spot.hospital}</strong> para a data: <strong> {request.date} </strong>
+                    <strong> {request.user.email} </strong> está solicitando um agendamento em <strong>{request.spot.hospital}</strong> para a data: <strong> {request.date} </strong>
                     </p>
-                    <button className="accept"> ACEITAR </button>
-                    <button className="reject"> REJEITAR </button>
+                    <button className="accept" onClick={() => handleAccept(request._id)}> ACEITAR </button>
+                    <button className="reject" onClick={() => handleReject(request._id)}> REJEITAR </button>
                 </li>
             ))}
 
